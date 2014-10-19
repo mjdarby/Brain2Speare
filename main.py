@@ -1,7 +1,7 @@
 import re, sys, random
 
 # Read in the BF file
-f = open("test.txt", "r")
+f = open("test_pointers.txt", "r")
 text = f.read()
 text = re.sub('[^><\+\-\.,\[\]]', '', text)
 f.close()
@@ -30,40 +30,16 @@ def get_character(pointer, characters):
     characters[pointer] = names[pointer]
   return characters[pointer]
 
-def interpret_bf(instructions, memory, paranthesies, characters, scenes):
-  MOVE_POINTER = 0
-  CHANGE_VALUE = 1
-  PRINT_VALUE = 2
-
+def bf_to_shakespeare(instructions, parentheses):
   instr_pointer = 0
-  pointer = 0
-  shakespeare = []
-  characters_on_stage = []
-  scene_number = 1
-  current_instr_type = 0
+  scene_number = 2
 
   while instr_pointer < len(instructions):
     instr = text[instr_pointer]
     if instr == '>':
-      pointer += 1
+      forward_pointer()
     elif instr == '<':
-      pointer -= 1
-    elif instr == '.':
-      sys.stdout.write(chr(memory[pointer]))
-    elif instr == '[':
-      if memory[pointer] == 0:
-        instr_pointer = paranthesies[instr_pointer]
-    elif instr == ']':
-      if memory[pointer] != 0:
-        instr_pointer = paranthesies[instr_pointer]
-    elif instr == '+':
-      memory[pointer] += 1
-      get_character(pointer, characters)
-      summing = True
-    elif instr == '-':
-      memory[pointer] -= 1
-      get_character(pointer, characters)
-      summing = True
+      backward_pointer()
     instr_pointer += 1
 
 def print_shakespeare(text):
@@ -72,15 +48,33 @@ def print_shakespeare(text):
     memory[x] = 0
   parentheses = {}
   characters = {}
-  scenes = {}
   get_parentheses(text, parentheses)
-  interpret_bf(text, memory, parentheses, characters, scenes)
+#  interpret_bf(text, memory, parentheses, characters)
   print "The Interpreted Brainfudge.\n"
-  for idx, character in characters.iteritems():
-    print "{character}, a big baloo.".format(character=character)
-  print ""
-  print "Act I: The Default."
+  print "Romeo, a stack."
+  print "Juliet, a stack from THE FUTURE."
+  print "Lady Macbeth, a zero.\n"
+  print "Act I: An egregious abuse."
+  print "Scene I: The fattening of Juliet."
+  print "[Enter Romeo and Juliet]"
+  sys.stdout.write("Romeo: ")
+  for x in range(1024):
+    sys.stdout.write("Remember thyself! ")
+  sys.stdout.write("\n")
+  print "[Exeunt]"
+  print "Act 2: Our Main Performance"
+  print "[Enter Romeo and Juliet]"
+  bf_to_shakespeare(text, parentheses)
 
+def forward_pointer():
+  print "Juliet: Remember thyself!"
+  print "Romeo: Recall the sins of the fathers."
+  print "Juliet: You are as good as me."
+
+def backward_pointer():
+  print "Romeo: You are as bad as me! Remember the days."
+  print "Juliet: Remember yourself."
+  
 def run_bf(instructions):
   memory = {}
   for x in range(1024):
