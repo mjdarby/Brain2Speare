@@ -14,3 +14,8 @@ Languages used:
 Libaries used:
 * roman (https://pypi.python.org/pypi/roman)
 * Standard Python libaries
+
+Future improvements:
+* The character reading stuff is kind of dodgy, so maybe look at that.
+* Randomise the names and statements to make the scripts more entertaining.
+* Big one: Move away from the 'abuse the stack' implementation to something cool. Alternatively, make the current implementation less bloated.
