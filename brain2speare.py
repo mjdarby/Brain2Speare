@@ -4,13 +4,15 @@ import re, sys, roman
 
 def get_parentheses(text, parentheses):
   stack = []
+  scene_number = 2
   for idx, instr in enumerate(text):
     if instr == '[':
       stack.append(idx)
     elif instr == ']':
       old_idx = stack.pop()
-      parentheses[old_idx] = idx
-      parentheses[idx] = old_idx
+      parentheses[old_idx] = scene_number
+      parentheses[idx] = scene_number + 1
+      scene_number += 2
 
 def bf_to_shakespeare(instructions, parentheses):
   instr_pointer = 0

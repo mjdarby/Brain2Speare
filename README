@@ -18,4 +18,5 @@ Libaries used:
 Future improvements:
 * The character reading stuff is kind of dodgy, so maybe look at that.
 * Randomise the names and statements to make the scripts more entertaining.
+* Fix the scene label generation so it doesn't use huge numbers so we can support larger BF programs
 * Big one: Move away from the 'abuse the stack' implementation to something cool. Alternatively, make the current implementation less bloated.
