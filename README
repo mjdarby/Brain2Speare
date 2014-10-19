@@ -1,3 +1,16 @@
-The greatest project of all time, the Brainfuck to Shakespeare converter. I call it.. Brain2Speare. Because I can't name projects. Obviously, Speare2Brain is a better name but it would also be a completely different program.
+Behold! The greatest project of all-time, the Brainfuck to Shakespeare transpiler: Brain2Speare. Because I can't name projects. Obviously, Speare2Brain is a better name but it would also be a completely different program. 
 
-Naive as all hell, we will abuse the stack in Shakespeare and hope there aren't over 1024 different memory addresses referenced in the source program.
+Naive as all hell, I abuse the stack in Shakespeare and hope there aren't over 1024 different memory addresses referenced in the source program. If there are, tough luck, we'll have to make Juliet even fatter.
+
+Thanks to:
+* William Shakespeare, for creating the Shakespeare language
+* Jon Åslund and Karl Hasselström, the actual creators of Shakespeare
+* Urban Müller, for Brainfuck
+* Brian Wong, for providing the spark of life for this insane idea
+
+Languages used:
+* Python
+
+Libaries used:
+* roman (https://pypi.python.org/pypi/roman)
+* Standard Python libaries
