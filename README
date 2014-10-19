@@ -1,0 +1,3 @@
+The greatest project of all time, the Brainfuck to Shakespeare converter. I call it.. Brain2Speare. Because I can't name projects. Obviously, Speare2Brain is a better name but it would also be a completely different program.
+
+Naive as all hell, we will abuse the stack in Shakespeare and hope there aren't over 1024 different memory addresses referenced in the source program.
