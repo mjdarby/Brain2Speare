@@ -37,7 +37,8 @@ def bf_to_shakespeare(instructions):
     elif instr == '<':
       shakespeare += backward_pointer()
     elif instr == '?':
-      shakespeare += modify_value(sums[sums_pointer])
+      if sums[sums_pointer] != 0:
+        shakespeare += modify_value(sums[sums_pointer])
       sums_pointer += 1
     elif instr == '.':
       shakespeare += print_value()
@@ -65,7 +66,7 @@ def get_shakespeare(text):
   shakespeare += "Scene I: The stackening of Juliet.\n" # Build up the Juliet stack
   shakespeare += "[Enter Romeo and Juliet]\n\n"
   shakespeare += "Romeo: "
-  for x in range(1024):
+  for x in range(8192):
     shakespeare += "Remember yourself! "
   shakespeare += "\n"
   shakespeare += "[Exeunt]\n\n"
