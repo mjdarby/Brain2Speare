@@ -49,17 +49,20 @@ def bf_to_shakespeare(instructions):
       shakespeare += close_bracket(instr_pointer, parentheses)
     instr_pointer += 1
 
+  # Early fancy-ification
+  shakespeare = re.sub("[\.!]", random_sentence_end, shakespeare)
+
   return shakespeare
 
 def get_shakespeare(text):
   shakespeare = ""
   parentheses = {}
   shakespeare += "The Interpreted Brainfuck.\n\n"
-  shakespeare += "Romeo, a stack that represents man's present and past.\n"
-  shakespeare += "Juliet, a stack that represents woman's future.\n"
+  shakespeare += "Romeo, a stack that represents the present and past.\n"
+  shakespeare += "Juliet, a stack that represents the future.\n"
   shakespeare += "Lady Macbeth, a zero that is only good for comparison.\n\n"
   shakespeare += "Act I: An egregious abuse.\n"
-  shakespeare += "Scene I: The fattening of Juliet.\n" # Build up the Juliet stack
+  shakespeare += "Scene I: The stackening of Juliet.\n" # Build up the Juliet stack
   shakespeare += "[Enter Romeo and Juliet]\n\n"
   shakespeare += "Romeo: "
   for x in range(1024):
@@ -76,14 +79,14 @@ def get_shakespeare(text):
 def forward_pointer():
   command = ""
   command += "Juliet: Remember yourself!\n"
-  command += "Romeo: Recall the sins of the fathers.\n"
-  command += "Juliet: You are as good as me.\n"
+  command += "Romeo: Recall recalltext\n"
+  command += "Juliet: Secondperson are as posadj as me.\n"
   return command
 
 def backward_pointer():
   command = ""
-  command += "Romeo: You are as good as me! Remember yourself.\n"
-  command += "Juliet: Recall yourself.\n"
+  command += "Romeo: Secondperson are as posadj as me! Remember yourself.\n"
+  command += "Juliet: Recall recalltext\n"
   return command
 
 def modify_value(value):
@@ -136,26 +139,28 @@ def get_powers_of_two(value):
 def generate_summation_statement(power, incrementing):
   choices = [(incrementing, True), (not incrementing, False)]
   positive_sum, positive_noun = random.choice(choices)
-  command = "Secondperson are as large as the " + ("sum of " if \
-positive_sum else "difference between ") + "yourself and a "
+  adjective = "posadj" if positive_noun else "negadj"
+  operator = "sum of " if positive_sum else "difference between "
+  command = "Secondperson are as " + adjective + " as the " + operator + \
+"yourself and a "
   for x in range(power):
     if positive_noun:
       command += "posadj "
     else:
       command += "negadj "
   if positive_noun:
-    command += "cat! "
+    command += "posnoun! "
   else:
-    command += "pig! "
+    command += "negnoun! "
   return command
 
 def open_bracket(pointer, parentheses):
   command = ""
   open_paren, close_paren = parentheses[pointer]
-  command += "\nScene " + numeral(open_paren) + ": Another scene.\n\n"
+  command += "\nScene " + numeral(open_paren) + ": scenename\n\n"
   command += "[Exeunt]\n\n"
   command += "[Enter Lady Macbeth and Romeo]\n\n"
-  command += "Lady Macbeth: Are secondperson as good as me?\n"
+  command += "Lady Macbeth: Are secondperson as posadj as me?\n"
   command += "Romeo: If so, let us proceed to scene " + \
         numeral(close_paren) + ".\n\n"
   command += "[Exit Lady Macbeth]\n\n"
@@ -167,11 +172,11 @@ def close_bracket(pointer, parentheses):
   open_paren, close_paren = parentheses[pointer]
   command += "\n[Exit Juliet]\n\n"
   command += "[Enter Lady Macbeth]\n\n"
-  command += "Lady Macbeth: Are you as bad as me?\n"
+  command += "Lady Macbeth: Are secondperson as negadj as me?\n"
   command += "Romeo: If not, let us proceed to scene " + \
         numeral(open_paren) + ".\n\n"
   command += "[Exeunt]\n\n"
-  command += "Scene " + numeral(close_paren) + ": Another scene.\n\n"
+  command += "Scene " + numeral(close_paren) + ": scenename\n\n"
   command += "[Exeunt]\n\n"
   command += "[Enter Romeo and Juliet]\n\n"
   return command
@@ -206,6 +211,19 @@ def remove_groups(text):
   return text
 
 # Functions to spruce up the text a bit.
+def random_scene_name(arg):
+  scene_name = random.choice(['A posadj posnoun',
+                              'A posadj negnoun',
+                              'A negadj posnoun',
+                              'A negadj negnoun'])
+  return scene_name + "."
+
+def random_recall_text(arg):
+  recall_text = random.choice(['the posadj question, and whether it is to be or not to be.',
+                              'the posadj negnoun in the mind\'s eye.',
+                              'the negadj madness and the method in it.',
+                              'the negadj negnoun on the negadj winter of our discontent.'])
+  return recall_text
 
 def random_positive_adjective(arg):
   return random.choice(['amazing',
@@ -281,10 +299,60 @@ def random_negative_adjective(arg):
 'worried'])
 
 def random_positive_noun(arg):
-  return arg
+  return random.choice(['Heaven',
+'King',
+'Lord',
+'angel',
+'flower',
+'happiness',
+'joy',
+'plum',
+'summer\'s day',
+'hero',
+'rose',
+'kingdom',
+'pony'])
 
 def random_negative_noun(arg):
-  return random.choice(['Thou', 'You'])
+  return random.choice(['Hell',
+'Microsoft',
+'bastard',
+'beggar',
+'blister',
+'codpiece',
+'coward',
+'curse',
+'death',
+'devil',
+'draught',
+'famine',
+'flirt-gill',
+'goat',
+'hate',
+'hog',
+'hound',
+'leech',
+'lie',
+'pig',
+'plague',
+'starvation',
+'toad',
+'war',
+'wolf'])
+
+def random_positive_comparative(arg):
+  return random.choice(['better'
+'bigger',
+'fresher',
+'friendlier',
+'nicer',
+'jollier'
+])
+
+def random_negative_comparative(arg):
+  return random.choice(['punier',
+'smaller',
+'worse'])
 
 def random_second_person(arg):
   return random.choice(['Thou', 'You'])
@@ -294,6 +362,171 @@ def random_second_person_lower(arg):
 
 def random_second_person_possessive(arg):
   return random.choice(['thyself', 'yourself'])
+
+def random_sentence_end(arg):
+  return random.choice(['.',
+'!'])
+
+def random_character():
+  random_character.characters = ['Achilles',
+'Adonis',
+'Adriana',
+'Aegeon',
+'Aemilia',
+'Agamemnon',
+'Agrippa',
+'Ajax',
+'Alonso',
+'Andromache',
+'Angelo',
+'Antiochus',
+'Antonio',
+'Arthur',
+'Autolycus',
+'Balthazar',
+'Banquo',
+'Beatrice',
+'Benedick',
+'Benvolio',
+'Bianca',
+'Brabantio',
+'Brutus',
+'Capulet',
+'Cassandra',
+'Cassius',
+'Christopher Sly',
+'Cicero',
+'Claudio',
+'Claudius',
+'Cleopatra',
+'Cordelia',
+'Cornelius',
+'Cressida',
+'Cymberline',
+'Demetrius',
+'Desdemona',
+'Dionyza',
+'Doctor Caius',
+'Dogberry',
+'Don John',
+'Don Pedro',
+'Donalbain',
+'Dorcas',
+'Duncan',
+'Egeus',
+'Emilia',
+'Escalus',
+'Falstaff',
+'Fenton',
+'Ferdinand',
+'Ford',
+'Fortinbras',
+'Francisca',
+'Friar John',
+'Friar Laurence',
+'Gertrude',
+'Goneril',
+'Hamlet',
+'Hecate',
+'Hector',
+'Helen',
+'Helena',
+'Hermia',
+'Hermonie',
+'Hippolyta',
+'Horatio',
+'Imogen',
+'Isabella',
+'John of Gaunt',
+'John of Lancaster',
+'Julia',
+'Juliet',
+'Julius Caesar',
+'King Henry',
+'King John',
+'King Lear',
+'King Richard',
+'Lady Capulet',
+'Lady Macbeth',
+'Lady Macduff',
+'Lady Montague',
+'Lennox',
+'Leonato',
+'Luciana',
+'Lucio',
+'Lychorida',
+'Lysander',
+'Macbeth',
+'Macduff',
+'Malcolm',
+'Mariana',
+'Mark Antony',
+'Mercutio',
+'Miranda',
+'Mistress Ford',
+'Mistress Overdone',
+'Mistress Page',
+'Montague',
+'Mopsa',
+'Oberon',
+'Octavia',
+'Octavius Caesar',
+'Olivia',
+'Ophelia',
+'Orlando',
+'Orsino',
+'Othello',
+'Page',
+'Pantino',
+'Paris',
+'Pericles',
+'Pinch',
+'Polonius',
+'Pompeius',
+'Portia',
+'Priam',
+'Prince Henry',
+'Prospero',
+'Proteus',
+'Publius',
+'Puck',
+'Queen Elinor',
+'Regan',
+'Robin',
+'Romeo',
+'Rosalind',
+'Sebastian',
+'Shallow',
+'Shylock',
+'Slender',
+'Solinus',
+'Stephano',
+'Thaisa',
+'The Abbot of Westminster',
+'The Apothecary',
+'The Archbishop of Canterbury',
+'The Duke of Milan',
+'The Duke of Venice',
+'The Ghost',
+'Theseus',
+'Thurio',
+'Timon',
+'Titania',
+'Titus',
+'Troilus',
+'Tybalt',
+'Ulysses',
+'Valentine',
+'Venus',
+'Vincentio',
+'Viola']
+  character = random.choice(random_character.characters)
+  random_character.characters.remove(character)
+  return character
+
+def replace_scene_names(text):
+  text = re.sub('scenename', random_scene_name, text)
+  return text
 
 def replace_yous(text):
   text = re.sub('secondperson', random_second_person_lower, text)
@@ -308,10 +541,69 @@ def replace_adjectives(text):
   text = re.sub('posadj', random_positive_adjective, text)
   return text
 
+def replace_comparatives(text):
+  text = re.sub('negcomp', random_negative_comparative, text)
+  text = re.sub('poscomp', random_positive_comparative, text)
+  return text
+
+def replace_nouns(text):
+  text = re.sub('negnoun', random_negative_noun, text)
+  text = re.sub('posnoun', random_positive_noun, text)
+  return text
+
+def replace_recall_text(text):
+  text = re.sub('recalltext', random_recall_text, text)
+  return text
+
+def fix_grammar(text):
+  text = re.sub('A ([aeiou])', r'An \1', text)
+  text = re.sub('a ([aeiou])', r'an \1', text)
+  return text
+
+def collapse_juliet_lines(text):
+  lines = text.split('\n')
+  result = []
+  for idx, line in enumerate(lines):
+    if (idx + 1) < len(text):
+      # Pull together all Juiliet lines after this one if it's the first
+      if line.startswith("Juliet:") and not lines[idx-1].startswith("Juliet:"):
+        result_line = line
+        checked_line = idx + 1
+        while lines[checked_line].startswith("Juliet:"):
+          result_line += " " + lines[checked_line][8:]
+          checked_line += 1
+        result.append(result_line)
+      # As long as the current line isn't a Juliet line, we can keep it
+      elif not line.startswith("Juliet:"):
+        result.append(line)
+    else:
+      result.append(line)
+  text = '\n'.join(result)
+  return text
+
+def replace_characters(text):
+  romeo_replace = random_character()
+  text = re.sub("Romeo", romeo_replace, text)
+  juliet_replace = random_character()
+  text = re.sub("Juliet", juliet_replace, text)
+  macbeth_replace = random_character()
+  text = re.sub("Lady Macbeth", macbeth_replace, text)
+  return text
+
 def improve_shakespeare(text):
+  # Replace scene names + recall text first because the other replacements
+  # will improve them further
+  text = replace_scene_names(text)
+  text = replace_recall_text(text)
+
   text = replace_yous(text)
   text = replace_yourselfs(text)
+  text = replace_comparatives(text)
   text = replace_adjectives(text)
+  text = replace_nouns(text)
+  text = fix_grammar(text)
+  text = collapse_juliet_lines(text)
+  text = replace_characters(text)
   return text
 
 # Work the magic of translating and sprucing!
