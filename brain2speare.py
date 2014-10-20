@@ -10,8 +10,8 @@ def get_parentheses(text, parentheses):
       stack.append(idx)
     elif instr == ']':
       old_idx = stack.pop()
-      parentheses[old_idx] = scene_number
-      parentheses[idx] = scene_number + 1
+      parentheses[old_idx] = (scene_number, scene_number + 1)
+      parentheses[idx] = (scene_number, scene_number + 1)
       scene_number += 2
 
 def bf_to_shakespeare(instructions, parentheses):
@@ -41,10 +41,10 @@ def bf_to_shakespeare(instructions, parentheses):
 def print_shakespeare(text):
   parentheses = {}
   get_parentheses(text, parentheses)
-  print("The Interpreted Brainfudge.\n")
-  print("Romeo, a stack.")
-  print("Juliet, a stack from THE FUTURE.")
-  print("Lady Macbeth, a zero.\n")
+  print("The Interpreted Brainfuck.\n")
+  print("Romeo, a stack that represents man's present and past.")
+  print("Juliet, a stack that represents woman's future.")
+  print("Lady Macbeth, a zero that is only good for comparison.\n")
   print("Act I: An egregious abuse.")
   print("Scene I: The fattening of Juliet.") # Build up the Juliet stack
   print("[Enter Romeo and Juliet]\n")
@@ -53,8 +53,8 @@ def print_shakespeare(text):
     sys.stdout.write("Remember thyself! ")
   sys.stdout.write("\n")
   print("[Exeunt]\n")
-  print("Act II: Our main erformance.\n")
-  print("Scene I: It begins and ends here.\n")
+  print("Act II: Our main performance.\n")
+  print("Scene I: It begins here.\n")
   print("[Enter Romeo and Juliet]\n")
   bf_to_shakespeare(text, parentheses)
   print("\n[Exeunt]")
@@ -75,24 +75,26 @@ def decrement():
   print("Juliet: You are as handsome as the sum of thyself and a pig.")
 
 def open_bracket(pointer, parentheses):
+  open_paren, close_paren = parentheses[pointer]
   print("\n[Exeunt]\n")
-  print("Scene " + numeral(pointer) + ": Another scene.\n")
+  print("Scene " + numeral(open_paren) + ": Another scene.\n")
   print("[Exeunt]\n")
   print("[Enter Lady Macbeth and Romeo]\n")
   print("Lady Macbeth: Are you as good as me?")
   print("Romeo: If so, let us proceed to scene " + \
-        numeral(parentheses[pointer]) + ".\n")
+        numeral(close_paren) + ".\n")
   print("[Exit Lady Macbeth]\n")
   print("[Enter Juliet]\n")
 
 def close_bracket(pointer, parentheses):
+  open_paren, close_paren = parentheses[pointer]
   print("\n[Exit Juliet]\n")
   print("[Enter Lady Macbeth]\n")
   print("Lady Macbeth: Are you as bad as me?")
   print("Romeo: If not, let us proceed to scene " + \
-        numeral(parentheses[pointer]) + ".")
+        numeral(open_paren) + ".")
   print("[Exeunt]\n")
-  print("Scene " + numeral(pointer) + ": Another scene.\n")
+  print("Scene " + numeral(close_paren) + ": Another scene.\n")
   print("[Exeunt]\n")
   print("[Enter Romeo and Juliet]\n")
 
