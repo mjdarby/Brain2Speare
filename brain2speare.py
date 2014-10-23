@@ -61,31 +61,44 @@ def get_shakespeare(text):
   shakespeare += "The Interpreted Brainfuck.\n\n"
   shakespeare += "Romeo, a stack that represents the present and past.\n"
   shakespeare += "Juliet, a stack that represents the future.\n"
-  shakespeare += "Lady Macbeth, a zero that is only good for comparison.\n\n"
-  shakespeare += "Act I: An egregious abuse.\n"
-  shakespeare += "Scene I: The stackening of Juliet.\n" # Build up the Juliet stack
-  shakespeare += "[Enter Romeo and Juliet]\n\n"
-  shakespeare += "Romeo: "
-  for x in range(8192):
-    shakespeare += "Remember yourself! "
-  shakespeare += "\n"
-  shakespeare += "[Exeunt]\n\n"
-  shakespeare += "Act II: Our main performance.\n\n"
+  shakespeare += "Lady Macbeth, a zero that is only good for comparison.\n"
+  shakespeare += "Macduff, who keeps track of our future.\n\n"
+  shakespeare += "Act I: Our main performance.\n\n"
   shakespeare += "Scene I: It begins here.\n\n"
   shakespeare += "[Enter Romeo and Juliet]\n\n"
   shakespeare += bf_to_shakespeare(text)
   shakespeare += "\n[Exeunt]\n"
   return shakespeare
 
-def forward_pointer():
+def decrement_stack_count():
   command = ""
+  command += "[Exit Romeo]\n"
+  command += "[Enter Macduff]\n"
+  command += "Juliet: Are secondperson as posadj as nothing?\n"
+  command += "Macduff: If so, remember yourself. Am I as posadj as nothing?\n"
+  command += "Juliet: If not, secondperson are as negadj as the sum of yourself and a negnoun!\n"
+  command += "[Exit Macduff]\n"
+  command += "[Enter Romeo]\n"
+  return command
+
+def increment_stack_count():
+  command = ""
+  command += "[Exit Romeo]\n"
+  command += "[Enter Macduff]\n"
+  command += "Juliet: Secondperson are as posadj as the sum of thyself and a cat!\n"
+  command += "[Exit Macduff]\n"
+  command += "[Enter Romeo]\n"
+  return command
+
+def forward_pointer():
+  command = decrement_stack_count()
   command += "Juliet: Remember yourself!\n"
   command += "Romeo: Recall recalltext\n"
   command += "Juliet: Secondperson are as posadj as me.\n"
   return command
 
 def backward_pointer():
-  command = ""
+  command = increment_stack_count()
   command += "Romeo: Secondperson are as posadj as me! Remember yourself.\n"
   command += "Juliet: Recall recalltext\n"
   return command
@@ -369,6 +382,97 @@ def random_sentence_end(arg):
 '!'])
 
 def random_character():
+  character = random.choice(random_character.characters)
+  random_character.characters.remove(character)
+  return character
+
+def replace_scene_names(text):
+  text = re.sub('scenename', random_scene_name, text)
+  return text
+
+def replace_yous(text):
+  text = re.sub('secondperson', random_second_person_lower, text)
+  text = re.sub('Secondperson', random_second_person, text)
+  return text
+
+def replace_yourselfs(text):
+  return re.sub('yourself', random_second_person_possessive, text)
+
+def replace_adjectives(text):
+  text = re.sub('negadj', random_negative_adjective, text)
+  text = re.sub('posadj', random_positive_adjective, text)
+  return text
+
+def replace_comparatives(text):
+  text = re.sub('negcomp', random_negative_comparative, text)
+  text = re.sub('poscomp', random_positive_comparative, text)
+  return text
+
+def replace_nouns(text):
+  text = re.sub('negnoun', random_negative_noun, text)
+  text = re.sub('posnoun', random_positive_noun, text)
+  return text
+
+def replace_recall_text(text):
+  text = re.sub('recalltext', random_recall_text, text)
+  return text
+
+def fix_grammar(text):
+  text = re.sub('A ([aeiou])', r'An \1', text)
+  text = re.sub('a ([aeiou])', r'an \1', text)
+  return text
+
+def collapse_juliet_lines(text):
+  lines = text.split('\n')
+  result = []
+  for idx, line in enumerate(lines):
+    if (idx + 1) < len(text):
+      # Pull together all Juiliet lines after this one if it's the first
+      if line.startswith("Juliet:") and not lines[idx-1].startswith("Juliet:"):
+        result_line = line
+        checked_line = idx + 1
+        while lines[checked_line].startswith("Juliet:"):
+          result_line += " " + lines[checked_line][8:]
+          checked_line += 1
+        result.append(result_line)
+      # As long as the current line isn't a Juliet line, we can keep it
+      elif not line.startswith("Juliet:"):
+        result.append(line)
+    else:
+      result.append(line)
+  text = '\n'.join(result)
+  return text
+
+def replace_characters(text):
+  romeo_replace = random_character()
+  text = re.sub("Romeo", romeo_replace, text)
+  juliet_replace = random_character()
+  text = re.sub("Juliet", juliet_replace, text)
+  macbeth_replace = random_character()
+  text = re.sub("Lady Macbeth", macbeth_replace, text)
+  macduff_replace = random_character()
+  text = re.sub("Macduff", macduff_replace, text)
+  return text
+
+def improve_shakespeare(text):
+  # Replace scene names + recall text first because the other replacements
+  # will improve them further
+  text = replace_scene_names(text)
+  text = replace_recall_text(text)
+
+  text = replace_yous(text)
+  text = replace_yourselfs(text)
+  text = replace_comparatives(text)
+  text = replace_adjectives(text)
+  text = replace_nouns(text)
+  text = fix_grammar(text)
+  text = collapse_juliet_lines(text)
+  text = replace_characters(text)
+  return text
+
+# Work the magic of translating and sprucing!
+
+if __name__ == "__main__":
   random_character.characters = ['Achilles',
 'Adonis',
 'Adriana',
@@ -521,95 +625,7 @@ def random_character():
 'Venus',
 'Vincentio',
 'Viola']
-  character = random.choice(random_character.characters)
-  random_character.characters.remove(character)
-  return character
 
-def replace_scene_names(text):
-  text = re.sub('scenename', random_scene_name, text)
-  return text
-
-def replace_yous(text):
-  text = re.sub('secondperson', random_second_person_lower, text)
-  text = re.sub('Secondperson', random_second_person, text)
-  return text
-
-def replace_yourselfs(text):
-  return re.sub('yourself', random_second_person_possessive, text)
-
-def replace_adjectives(text):
-  text = re.sub('negadj', random_negative_adjective, text)
-  text = re.sub('posadj', random_positive_adjective, text)
-  return text
-
-def replace_comparatives(text):
-  text = re.sub('negcomp', random_negative_comparative, text)
-  text = re.sub('poscomp', random_positive_comparative, text)
-  return text
-
-def replace_nouns(text):
-  text = re.sub('negnoun', random_negative_noun, text)
-  text = re.sub('posnoun', random_positive_noun, text)
-  return text
-
-def replace_recall_text(text):
-  text = re.sub('recalltext', random_recall_text, text)
-  return text
-
-def fix_grammar(text):
-  text = re.sub('A ([aeiou])', r'An \1', text)
-  text = re.sub('a ([aeiou])', r'an \1', text)
-  return text
-
-def collapse_juliet_lines(text):
-  lines = text.split('\n')
-  result = []
-  for idx, line in enumerate(lines):
-    if (idx + 1) < len(text):
-      # Pull together all Juiliet lines after this one if it's the first
-      if line.startswith("Juliet:") and not lines[idx-1].startswith("Juliet:"):
-        result_line = line
-        checked_line = idx + 1
-        while lines[checked_line].startswith("Juliet:"):
-          result_line += " " + lines[checked_line][8:]
-          checked_line += 1
-        result.append(result_line)
-      # As long as the current line isn't a Juliet line, we can keep it
-      elif not line.startswith("Juliet:"):
-        result.append(line)
-    else:
-      result.append(line)
-  text = '\n'.join(result)
-  return text
-
-def replace_characters(text):
-  romeo_replace = random_character()
-  text = re.sub("Romeo", romeo_replace, text)
-  juliet_replace = random_character()
-  text = re.sub("Juliet", juliet_replace, text)
-  macbeth_replace = random_character()
-  text = re.sub("Lady Macbeth", macbeth_replace, text)
-  return text
-
-def improve_shakespeare(text):
-  # Replace scene names + recall text first because the other replacements
-  # will improve them further
-  text = replace_scene_names(text)
-  text = replace_recall_text(text)
-
-  text = replace_yous(text)
-  text = replace_yourselfs(text)
-  text = replace_comparatives(text)
-  text = replace_adjectives(text)
-  text = replace_nouns(text)
-  text = fix_grammar(text)
-  text = collapse_juliet_lines(text)
-  text = replace_characters(text)
-  return text
-
-# Work the magic of translating and sprucing!
-
-if __name__ == "__main__":
   if len(sys.argv) < 2:
     print("Usage: ./brain2speare.py input.b > output.spl")
     sys.exit(2)
