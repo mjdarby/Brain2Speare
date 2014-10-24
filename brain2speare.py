@@ -75,7 +75,7 @@ def decrement_stack_count():
   command += "[Exit Romeo]\n"
   command += "[Enter Macduff]\n"
   command += "Juliet: Are secondperson as posadj as nothing?\n"
-  command += "Macduff: If so, remember yourself. Am I as posadj as nothing?\n"
+  command += "Macduff: If so, remember nothing. Am I as posadj as nothing?\n"
   command += "Juliet: If not, secondperson are as negadj as the sum of yourself and a negnoun!\n"
   command += "[Exit Macduff]\n"
   command += "[Enter Romeo]\n"
