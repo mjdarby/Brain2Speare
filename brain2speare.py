@@ -18,7 +18,7 @@ def get_parentheses(text):
       scene_number += 2
   return parentheses
 
-def bf_to_shakespeare(instructions):
+def bf_to_shakespeare(instructions, wrapping):
   instr_pointer = 0
   scene_number = 2
   sums_pointer = 0
@@ -38,7 +38,7 @@ def bf_to_shakespeare(instructions):
       shakespeare += backward_pointer()
     elif instr == '?':
       if sums[sums_pointer] != 0:
-        shakespeare += modify_value(sums[sums_pointer])
+        shakespeare += modify_value(sums[sums_pointer], wrapping)
       sums_pointer += 1
     elif instr == '.':
       shakespeare += print_value()
@@ -55,7 +55,7 @@ def bf_to_shakespeare(instructions):
 
   return shakespeare
 
-def get_shakespeare(text):
+def get_shakespeare(text, wrapping):
   shakespeare = ""
   parentheses = {}
   shakespeare += "The Interpreted Brainfuck.\n\n"
@@ -66,7 +66,7 @@ def get_shakespeare(text):
   shakespeare += "Act I: Our main performance.\n\n"
   shakespeare += "Scene I: It begins here.\n\n"
   shakespeare += "[Enter Romeo and Juliet]\n\n"
-  shakespeare += bf_to_shakespeare(text)
+  shakespeare += bf_to_shakespeare(text, wrapping)
   shakespeare += "\n[Exeunt]\n"
   return shakespeare
 
@@ -103,12 +103,13 @@ def backward_pointer():
   command += "Juliet: Recall recalltext\n"
   return command
 
-def modify_value(value):
-  command = sum_up_or_subtract_down(value, value > 0)
+def modify_value(value, wrapping):
+  command = sum_up_or_subtract_down(value, wrapping)
   return command
 
-def sum_up_or_subtract_down(value, incrementing):
+def sum_up_or_subtract_down(value, wrapping):
   command = "Juliet: "
+  incrementing = value > 0
   # There's some bit math here, so abandon all hope all ye who enter here.
   if not incrementing:
     value = -value
@@ -140,6 +141,11 @@ def sum_up_or_subtract_down(value, incrementing):
       # If we're subtracting, it's easier to just subtract down
       for power_of_two in value_powers_of_two:
         command += generate_summation_statement(power_of_two, False)
+  if wrapping:
+    command += "Romeo: Am I bigger than a posadj posadj posadj posadj posadj posadj posadj posadj posnoun?\n"
+    command += "Juliet: If so, you are as negadj as the difference between yourself and a posadj posadj posadj posadj posadj posadj posadj posadj posnoun.\n"
+    command += "Romeo: Am I smaller than nothing?\n"
+    command += "Juliet: If so, you are as posadj as the sum of yourself and a posadj posadj posadj posadj posadj posadj posadj posadj posnoun.\n"
   return command + "\n"
 
 def get_powers_of_two(value):
@@ -626,14 +632,20 @@ if __name__ == "__main__":
 'Vincentio',
 'Viola']
 
-  if len(sys.argv) < 2:
-    print("Usage: ./brain2speare.py input.b > output.spl")
+  if (len(sys.argv) < 2 or len(sys.argv) > 3 or
+      (sys.argv[1] != "-w" and len(sys.argv) == 3)):
+    print("Usage: ./brain2speare.py [-w] input.b > output.spl")
     sys.exit(2)
+
+  wrapping = False
   filename = sys.argv[1]
+  if sys.argv[1] == '-w':
+    wrapping = True
+    filename = sys.argv[2]
   # Read in the BF file
   f = open(filename, "r")
   text = f.read()
   text = re.sub('[^><\+\-\.,\[\]]', '', text)
   f.close()
 
-  print(improve_shakespeare(get_shakespeare(text)))
+  print(improve_shakespeare(get_shakespeare(text, wrapping)))
